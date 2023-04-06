@@ -3,7 +3,7 @@
 # @Author  : huangkai
 # @File    : label_tool.py
 """
-分类标注
+single-pass
 
 """
 import numpy as np
@@ -32,16 +32,13 @@ jaccard_coefficient = Jaccrad(a, b)
 print(jaccard_coefficient)
 
 
-def single_pass(self, corpus, theta):
+def single_pass(corpus, theta):
     """
     2020-6-5 将single_pass聚类结果平均句向量，然后计算置信度，获取置信度
-    :param corpus_vec:
     :param corpus:
     :param theta:
-    :return:
+    :return:{topic:["",""],topic:["",""]}
     """
-    # clusters = {}
-    # cluster_cores = {}
     cluster_text = {}
     num_topic = 0
 
@@ -63,11 +60,10 @@ def single_pass(self, corpus, theta):
                 result.append(temp_score)
             max_score_idx, max_score = np.argmax(result), np.max(result)
 
-            if max_score > 0.8:
+            if max_score > theta:
                 cluster_text[int(max_score_idx)].append(text)
             else:
                 cluster_text[num_topic + 1] = [text]
-
-    # cluster_text格式为：{cluster_num1:[text_bag1],cluster_num2:[text_bag2],...}
+                num_topic += 1
 
     return cluster_text
